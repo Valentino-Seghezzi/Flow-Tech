@@ -443,6 +443,14 @@ function sanitizeImagePath(path) {
   return path.split('/').map(part => encodeURIComponent(part)).join('/');
 }
 
+// Función auxiliar para manejar imágenes rotas sin romper el HTML
+function handleImageError(imgElement, iconSvg) {
+  const parent = imgElement.parentElement;
+  if (parent) {
+    parent.innerHTML = `<div class="w-12 h-12 rounded-2xl bg-black/5 flex items-center justify-center text-neutral-800 shrink-0 my-4"><span class="w-6 h-6 block">${iconSvg}</span></div>`;
+  }
+}
+
 Object.entries(catalog).forEach(([key, section]) => {
   const wrap = document.createElement('section');
   wrap.id = key; wrap.className = 'py-12';
@@ -480,14 +488,15 @@ Object.entries(catalog).forEach(([key, section]) => {
     }
 
     const cleanImgPath = sanitizeImagePath(item.image);
+    const iconSvg = getIcon(section, item);
 
+    // Creamos la tarjeta mediante elementos del DOM para evitar problemas de comillas en HTML
     const card = document.createElement('div');
     card.className = 'card liquid-glass reveal rounded-3xl p-5 flex flex-col items-center justify-between gap-4 min-h-[260px]';
     card.style.transitionDelay = (idx % 8) * 30 + 'ms';
 
-    // Contenedor seguro para la imagen
-    const mediaDiv = document.createElement('div');
-    mediaDiv.className = 'w-full h-44 rounded-2xl bg-white/60 p-2 flex items-center justify-center overflow-hidden border border-black/5 shrink-0';
+    const mediaContainer = document.createElement('div');
+    mediaContainer.className = 'w-full h-44 rounded-2xl bg-white/60 p-2 flex items-center justify-center overflow-hidden border border-black/5 shrink-0';
 
     if (item.image) {
       const img = document.createElement('img');
@@ -496,28 +505,27 @@ Object.entries(catalog).forEach(([key, section]) => {
       img.loading = 'lazy';
       img.className = 'max-h-full max-w-full object-contain hover:scale-105 transition-transform duration-300';
       img.onerror = function() {
-        mediaDiv.innerHTML = `<div class="w-12 h-12 rounded-2xl bg-black/5 flex items-center justify-center text-neutral-800 shrink-0 my-4"><span class="w-6 h-6 block">${getIcon(section, item)}</span></div>`;
+        handleImageError(this, iconSvg);
       };
-      mediaDiv.appendChild(img);
+      mediaContainer.appendChild(img);
     } else {
-      mediaDiv.innerHTML = `<div class="w-12 h-12 rounded-2xl bg-black/5 flex items-center justify-center text-neutral-800 shrink-0 my-4"><span class="w-6 h-6 block">${getIcon(section, item)}</span></div>`;
+      mediaContainer.innerHTML = `<div class="w-12 h-12 rounded-2xl bg-black/5 flex items-center justify-center text-neutral-800 shrink-0 my-4"><span class="w-6 h-6 block">${iconSvg}</span></div>`;
     }
 
-    card.appendChild(mediaDiv);
+    card.appendChild(mediaContainer);
 
-    // Cápsula con texto e enlace de WhatsApp
-    const pillLink = document.createElement('a');
-    pillLink.href = whatsappUrl;
-    pillLink.target = '_blank';
-    pillLink.rel = 'noopener noreferrer';
-    pillLink.title = `Consultar por ${item.name}`;
-    pillLink.className = 'glass-pill px-4 py-3 text-center block w-full hover:scale-[1.02] transition-transform';
-    pillLink.innerHTML = `
+    const linkPill = document.createElement('a');
+    linkPill.href = whatsappUrl;
+    linkPill.target = '_blank';
+    linkPill.rel = 'noopener noreferrer';
+    linkPill.title = `Consultar por ${item.name}`;
+    linkPill.className = 'glass-pill px-4 py-3 text-center block w-full hover:scale-[1.02] transition-transform';
+    linkPill.innerHTML = `
       <p class="text-[12px] leading-snug text-neutral-900 font-medium">${item.name}</p>
       ${colorsHTML}
     `;
-    
-    card.appendChild(pillLink);
+
+    card.appendChild(linkPill);
     grid.appendChild(card);
   });
 
