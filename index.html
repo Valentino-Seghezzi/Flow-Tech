@@ -438,6 +438,12 @@ function getIcon(section, item) {
   return ICONS[section.icon] || ICONS.laptop;
 }
 
+// Función auxiliar para codificar espacios en las URLs de imágenes
+function sanitizeImagePath(path) {
+  if (!path) return '';
+  return path.split('/').map(part => encodeURIComponent(part)).join('/');
+}
+
 Object.entries(catalog).forEach(([key, section]) => {
   const wrap = document.createElement('section');
   wrap.id = key; wrap.className = 'py-12';
@@ -475,10 +481,13 @@ Object.entries(catalog).forEach(([key, section]) => {
       `;
     }
 
-    // Renderizado condicional: Imagen real si está disponible, o Ícono por defecto
+    // Sanear la ruta para evitar roturas por espacios
+    const cleanImgPath = sanitizeImagePath(item.image);
+
+    // Renderizado condicional con fallback de imagen rota
     const mediaHTML = item.image 
       ? `<div class="w-full h-44 rounded-2xl bg-white/60 p-2 flex items-center justify-center overflow-hidden border border-black/5 shrink-0">
-           <img src="${item.image}" alt="${item.name}" class="max-h-full max-w-full object-contain hover:scale-105 transition-transform duration-300">
+           <img src="${cleanImgPath}" alt="${item.name}" loading="lazy" onError="this.onerror=null; this.parentElement.innerHTML='<div class=\\'w-12 h-12 rounded-2xl bg-black/5 flex items-center justify-center text-neutral-800 shrink-0 my-4\\'><span class=\\'w-6 h-6 block\\'>${getIcon(section, item)}</span></div>';" class="max-h-full max-w-full object-contain hover:scale-105 transition-transform duration-300">
          </div>`
       : `<div class="w-12 h-12 rounded-2xl bg-black/5 flex items-center justify-center text-neutral-800 shrink-0 my-4">
            <span class="w-6 h-6 block">${getIcon(section, item)}</span>
