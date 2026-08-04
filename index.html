@@ -44,14 +44,11 @@
     .hero-cloud-card { border-radius: 3.5rem; }
   }
 
-  /* Cápsula interactiva en productos */
+  /* Cápsula interactiva interna */
   .glass-pill{
     background: rgba(0, 0, 0, 0.02);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    border-radius: 1.25rem;
-    transition: background 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 1rem;
   }
 
   .card{ transition: transform .5s cubic-bezier(.2,.8,.2,1), border-color .5s ease, background .5s ease, box-shadow .5s ease; }
@@ -80,15 +77,17 @@
   }
   .cta-btn:hover{ transform: translateY(-2px) scale(1.015); box-shadow: 0 12px 30px rgba(0,0,0,0.18); }
 
+  /* Botón de WhatsApp Integrado */
   .whatsapp-btn {
-    background-color: #25d366;
+    background-color: #22c55e;
     color: #ffffff;
-    transition: all 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
   }
   .whatsapp-btn:hover {
-    background-color: #1ebc57;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(37, 211, 102, 0.35);
+    background-color: #16a34a;
+    transform: scale(1.02);
+    box-shadow: 0 6px 16px rgba(34, 197, 94, 0.35);
   }
 
   .ghost-btn{
@@ -113,6 +112,27 @@
     position: relative;
   }
 
+  /* Carrusel móvil con scroll infinito */
+  @media (max-width: 639px) {
+    .mobile-slider {
+      display: flex !important;
+      gap: 12px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: 4px 0px 16px 0px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none; /* Ocultar scrollbar en Firefox */
+    }
+    .mobile-slider::-webkit-scrollbar {
+      display: none; /* Ocultar scrollbar en Chrome/Safari */
+    }
+    .mobile-slider .card {
+      scroll-snap-align: start;
+      flex: 0 0 calc(50% - 6px);
+      width: calc(50% - 6px);
+    }
+  }
+
   .noise-veil{
     position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.025; mix-blend-mode:multiply;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -126,13 +146,21 @@
 <!-- ===== NAVBAR ===== -->
 <header class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-6xl">
   <nav class="liquid-glass rounded-[2rem] lg:rounded-full px-5 md:px-7 py-3">
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between gap-3">
       <a href="#inicio" class="flex items-center gap-2.5 shrink-0">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.2">
           <circle cx="12" cy="12" r="9.3"/><ellipse cx="12" cy="12" rx="9.3" ry="4"/><line x1="2.7" y1="12" x2="21.3" y2="12"/>
         </svg>
         <span class="serif-upright text-lg tracking-wide text-neutral-900">Flow-Tech</span>
       </a>
+
+      <!-- Buscador con Lupa -->
+      <div class="relative flex-1 max-w-xs mx-2">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-neutral-400">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </span>
+        <input type="text" id="product-search" placeholder="Buscar producto..." class="w-full pl-9 pr-4 py-1.5 bg-black/5 border border-black/10 rounded-full text-xs text-neutral-800 placeholder-neutral-500 focus:outline-none focus:bg-white focus:border-black/30 transition-all">
+      </div>
 
       <!-- Menú Escritorio -->
       <div class="hidden lg:flex items-center gap-5 text-[13px] font-normal text-neutral-700">
@@ -149,7 +177,7 @@
       <a href="https://wa.me/5493564379904" target="_blank" rel="noopener noreferrer" class="hidden lg:block ghost-btn rounded-full px-4 py-1.5 text-[13px] shrink-0">Contacto</a>
 
       <!-- Botón Hamburguesa Mobile -->
-      <button id="menu-toggle" aria-label="Abrir menú" class="lg:hidden p-2 text-neutral-800 hover:text-black focus:outline-none">
+      <button id="menu-toggle" aria-label="Abrir menú" class="lg:hidden p-2 text-neutral-800 hover:text-black focus:outline-none shrink-0">
         <svg id="icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
         <svg id="icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
@@ -191,7 +219,7 @@
 
 <div class="max-w-6xl mx-auto px-6"><div class="divider reveal my-6"></div></div>
 
-<!-- ===== INFORMACIÓN DE ENVÍOS Y PAGOS ===== -->
+<!-- ===== INFORMACIÓN ===== -->
 <section class="max-w-6xl mx-auto px-6 py-8">
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6 reveal">
     <div class="liquid-glass rounded-3xl p-6 flex flex-col justify-between">
@@ -217,7 +245,7 @@
 
 <div class="max-w-6xl mx-auto px-6"><div class="divider reveal my-6"></div></div>
 
-<!-- DATOS COMPLETOS DEL CATÁLOGO -->
+<!-- DATOS DEL CATÁLOGO -->
 <script id="catalog-data" type="application/json">
 {
   "iphone": {
@@ -278,14 +306,14 @@
     "icon": "watch",
     "badge": "Stock Relojes",
     "items": [
-      { "name": "Amazfit Active 2 Round", "colors": ["Black"], "image": "Imagenes/Relojes/Amazfit active 2 round.webp" },
-      { "name": "Amazfit Balance Sunset Grey", "colors": ["Sunset Grey"], "image": "Imagenes/Relojes/amazfit balance.webp" },
-      { "name": "Amazfit Bip 5", "colors": ["Blue", "Black"], "image": "Imagenes/Relojes/amazfit bip 5.webp" },
-      { "name": "Amazfit GTS 4 Mini", "colors": ["Graphite Black"], "image": "Imagenes/Relojes/amazfit gts 4 mini.webp" },
-      { "name": "Amazfit T-Rex 3", "colors": ["Haze Gray"], "image": "Imagenes/Relojes/amazfit T-rex 3.jpg" },
-      { "name": "Apple Watch SE 2 40mm", "colors": ["Midnight"], "image": "Imagenes/Relojes/apple watch serie SE 2.jpg" },
+      { "name": "Amazfit Cheetah Pro", "colors": ["Black"], "image": "Imagenes/Relojes/Amazfit Cheetah Pro.webp" },
+      { "name": "Amazfit Balance Sunset Grey", "colors": ["Sunset Grey"], "image": "Imagenes/Relojes/Amazfit Balance Sunset Grey.webp" },
+      { "name": "Amazfit Bip 5", "colors": ["Blue", "Black"], "image": "Imagenes/Relojes/Amazfit Bip 5.webp" },
+      { "name": "Amazfit GTS 4 Mini", "colors": ["Graphite Black"], "image": "Imagenes/Relojes/Amazfit GTS 4 Mini.webp" },
+      { "name": "Amazfit T-Rex 2", "colors": ["Haze Gray"], "image": "Imagenes/Relojes/Amazfit T-Rex 2.jpg" },
+      { "name": "Apple Watch SE 2 40mm", "colors": ["Midnight"], "image": "Imagenes/Relojes/Apple Watch SE 2 40mm.jpg" },
       { "name": "Samsung Galaxy Fit 3", "colors": ["Pink Gold"], "image": "Imagenes/Relojes/Samsung Galaxy Fit 3.avif" },
-      { "name": "Samsung Galaxy Watch 6 Classic 46mm", "colors": ["White", "Silver"], "image": "Imagenes/Relojes/Samsung galaxy watch 6 classic 46mm.webp" }
+      { "name": "Samsung Galaxy Watch 6 Classic", "colors": ["White", "Silver"], "image": "Imagenes/Relojes/Samsung Galaxy Watch 6 Classic.webp" }
     ]
   },
   "apple": {
@@ -403,11 +431,11 @@ menuToggle.addEventListener('click', () => {
 mobileLinks.forEach(link => {
   link.addEventListener('click', () => {
     mobileMenu.classList.add('hidden'); mobileMenu.classList.remove('flex');
-    iconOpen.classList.remove('hidden'); iconClose.classList.add('hidden');
+    iconOpen.classList.add('hidden'); iconClose.classList.add('hidden');
   });
 });
 
-// MAPA COMPLETO DE COLORES A CÓDIGOS HEX
+// MAPA DE COLORES A HEX
 const COLOR_MAP = {
   "black": "#1c1c1e", "midnight": "#19232d", "jet black": "#0a0a0a", "awesome charcoal": "#2b2b2b", "black titanium": "#2f3032", "space black": "#1b1b1d", "graphite": "#383838", "graphite black": "#2d2d2d", "galaxy black": "#151518",
   "white": "#ffffff", "starlight": "#f0ede6", "silver": "#e2e4e1", "awesome white": "#f9f9f9",
@@ -445,22 +473,9 @@ function getIcon(section, item) {
   return ICONS[section.icon] || ICONS.laptop;
 }
 
-function sanitizeImagePath(path) {
-  if (!path) return '';
-  return path.split('/').map(part => encodeURIComponent(part)).join('/');
-}
-
-// Función auxiliar para manejar imágenes rotas sin romper el HTML
-function handleImageError(imgElement, iconSvg) {
-  const parent = imgElement.parentElement;
-  if (parent) {
-    parent.innerHTML = `<div class="w-12 h-12 rounded-2xl bg-black/5 flex items-center justify-center text-neutral-800 shrink-0 my-4"><span class="w-6 h-6 block">${iconSvg}</span></div>`;
-  }
-}
-
 Object.entries(catalog).forEach(([key, section]) => {
   const wrap = document.createElement('section');
-  wrap.id = key; wrap.className = 'py-12';
+  wrap.id = key; wrap.className = 'py-12 catalog-section';
 
   wrap.innerHTML = `
     <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8 reveal">
@@ -473,10 +488,10 @@ Object.entries(catalog).forEach(([key, section]) => {
   `;
 
   const grid = document.createElement('div');
-  grid.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5';
+  grid.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mobile-slider product-grid';
 
   section.items.forEach((item, idx) => {
-    const encodedMessage = encodeURIComponent(`Hola, quiero consultar por el producto: ${item.name}`);
+    const encodedMessage = encodeURIComponent(`Hola, quiero información sobre ${item.name}`);
     const whatsappUrl = `https://wa.me/5493564379904?text=${encodedMessage}`;
 
     let colorsHTML = '';
@@ -494,57 +509,32 @@ Object.entries(catalog).forEach(([key, section]) => {
       `;
     }
 
-    const cleanImgPath = sanitizeImagePath(item.image);
-    const iconSvg = getIcon(section, item);
+    const mediaHTML = item.image 
+      ? `<div class="w-full h-40 rounded-2xl bg-white/60 p-2 flex items-center justify-center overflow-hidden border border-black/5 shrink-0">
+           <img src="${item.image}" alt="${item.name}" class="max-h-full max-w-full object-contain hover:scale-105 transition-transform duration-300">
+         </div>`
+      : `<div class="w-12 h-12 rounded-2xl bg-black/5 flex items-center justify-center text-neutral-800 shrink-0 my-4">
+           <span class="w-6 h-6 block">${getIcon(section, item)}</span>
+         </div>`;
 
-    // Creamos la tarjeta mediante elementos del DOM
     const card = document.createElement('div');
-    card.className = 'card liquid-glass reveal rounded-3xl p-5 flex flex-col items-center justify-between gap-4 min-h-[260px]';
+    card.className = 'card liquid-glass reveal rounded-3xl p-5 flex flex-col justify-between gap-3 min-h-[310px] product-card';
+    card.setAttribute('data-name', item.name.toLowerCase());
     card.style.transitionDelay = (idx % 8) * 30 + 'ms';
-
-    const mediaContainer = document.createElement('div');
-    mediaContainer.className = 'w-full h-44 rounded-2xl bg-white/60 p-2 flex items-center justify-center overflow-hidden border border-black/5 shrink-0';
-
-    if (item.image) {
-      const img = document.createElement('img');
-      img.src = cleanImgPath;
-      img.alt = item.name;
-      img.loading = 'lazy';
-      img.className = 'max-h-full max-w-full object-contain hover:scale-105 transition-transform duration-300';
-      img.onerror = function() {
-        handleImageError(this, iconSvg);
-      };
-      mediaContainer.appendChild(img);
-    } else {
-      mediaContainer.innerHTML = `<div class="w-12 h-12 rounded-2xl bg-black/5 flex items-center justify-center text-neutral-800 shrink-0 my-4"><span class="w-6 h-6 block">${iconSvg}</span></div>`;
-    }
-
-    card.appendChild(mediaContainer);
-
-    // Contenedor de la información del producto
-    const infoPill = document.createElement('div');
-    infoPill.className = 'glass-pill px-4 py-3 text-center block w-full';
-    infoPill.innerHTML = `
-      <p class="text-[12px] leading-snug text-neutral-900 font-medium">${item.name}</p>
-      ${colorsHTML}
+    card.innerHTML = `
+      <div>
+        ${mediaHTML}
+        <div class="glass-pill p-3 mt-3 text-center">
+          <p class="text-[12px] leading-snug text-neutral-900 font-medium">${item.name}</p>
+          ${colorsHTML}
+        </div>
+      </div>
+      
+      <a href="${whatsappUrl}" target="_blank" rel="noopener noreferrer" class="whatsapp-btn w-full py-2.5 px-3 rounded-full text-center text-[11px] font-medium flex items-center justify-center gap-1.5 tracking-wide mt-auto">
+        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01C17.18 3.03 14.69 2 12.04 2zM12.04 20.3c-1.43 0-2.82-.38-4.04-1.11l-.29-.17-3.03.8.81-2.95-.19-.31c-.81-1.31-1.24-2.83-1.24-4.38 0-4.57 3.72-8.29 8.29-8.29 2.22 0 4.3 87 5.87 2.44 1.57 1.57 2.44 3.65 2.44 5.87 0 4.57-3.72 8.29-8.29 8.29zm4.55-6.29c-.25-.13-1.48-.73-1.71-.82-.23-.09-.4-.13-.57.13-.17.25-.66.82-.81.99-.15.17-.3.19-.55.06-.25-.13-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.15-.25-.02-.39.11-.52.12-.12.25-.3.38-.45.13-.15.17-.25.25-.42.08-.17.04-.32-.02-.45-.06-.13-.57-1.38-.79-1.89-.21-.5-.43-.43-.57-.44h-.49c-.17 0-.45.06-.69.32-.24.26-.92.9-9.2 2.19 0 0 1.99 3.05 4.83 4.28 2.84 1.23 2.84.82 3.35.77.51-.05 1.68-.69 1.92-1.35.24-.66.24-1.23.17-1.35-.07-.12-.25-.19-.5-.32z"/></svg>
+        Consultar en WhatsApp
+      </a>
     `;
-    card.appendChild(infoPill);
-
-    // Botón de WhatsApp
-    const waBtn = document.createElement('a');
-    waBtn.href = whatsappUrl;
-    waBtn.target = '_blank';
-    waBtn.rel = 'noopener noreferrer';
-    waBtn.title = `Consultar por ${item.name} en WhatsApp`;
-    waBtn.className = 'whatsapp-btn rounded-full py-2.5 px-4 text-center w-full flex items-center justify-center gap-2 text-xs font-medium tracking-wide';
-    waBtn.innerHTML = `
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
-      </svg>
-      <span>Consultar en WhatsApp</span>
-    `;
-    card.appendChild(waBtn);
-
     grid.appendChild(card);
   });
 
@@ -556,13 +546,76 @@ Object.entries(catalog).forEach(([key, section]) => {
   main.appendChild(divider);
 });
 
-// Scroll Reveal Observer
+// Lógica de Carrusel Infinito en Mobile
+if (window.innerWidth < 640) {
+  document.querySelectorAll('.mobile-slider').forEach(slider => {
+    const originalCards = Array.from(slider.children);
+    if (originalCards.length < 2) return;
+
+    // Clonar elementos al inicio y al final para efecto bucle continuo
+    const firstClone = originalCards[0].cloneNode(true);
+    const lastClone = originalCards[originalCards.length - 1].cloneNode(true);
+
+    slider.appendChild(firstClone);
+    slider.insertBefore(lastClone, originalCards[0]);
+
+    // Posicionar inicialmente en el primer elemento real (índice 1 tras el clon)
+    setTimeout(() => {
+      slider.scrollLeft = slider.children[1].offsetLeft - slider.offsetLeft;
+    }, 50);
+
+    let isScrolling;
+    slider.addEventListener('scroll', () => {
+      clearTimeout(isScrolling);
+      isScrolling = setTimeout(() => {
+        const maxScrollLeft = slider.scrollWidth - slider.clientWidth;
+        
+        // Si llega al clon del final, salta de forma invisible al inicio real
+        if (slider.scrollLeft >= maxScrollLeft - 5) {
+          slider.style.scrollBehavior = 'auto';
+          slider.scrollLeft = slider.children[1].offsetLeft - slider.offsetLeft;
+          slider.style.scrollBehavior = 'smooth';
+        } 
+        // Si llega al clon del inicio, salta de forma invisible al final real
+        else if (slider.scrollLeft <= 2) {
+          slider.style.scrollBehavior = 'auto';
+          slider.scrollLeft = slider.children[slider.children.length - 2].offsetLeft - slider.offsetLeft;
+          slider.style.scrollBehavior = 'smooth';
+        }
+      }, 50);
+    });
+  });
+}
+
+// Buscador
+const searchInput = document.getElementById('product-search');
+searchInput.addEventListener('input', (e) => {
+  const term = e.target.value.toLowerCase().trim();
+  const sections = document.querySelectorAll('.catalog-section');
+
+  sections.forEach(section => {
+    let hasVisibleCards = false;
+    const cards = section.querySelectorAll('.product-card');
+    
+    cards.forEach(card => {
+      const productName = card.getAttribute('data-name');
+      if (productName && productName.includes(term)) {
+        card.style.display = 'flex';
+        hasVisibleCards = true;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    section.style.display = hasVisibleCards ? 'block' : 'none';
+  });
+});
+
+// Scroll Reveal
 const io = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
 }, { threshold: 0.1 });
-
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 </script>
-
 </body>
 </html>
